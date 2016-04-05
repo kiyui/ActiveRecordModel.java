@@ -64,11 +64,10 @@ public class ActiveRecordModel {
         return connect(hostname, username, password, database, 3306);
     }
 
-    public ArrayList<HashMap<String, String>> all() throws SQLException {
+    private ArrayList<HashMap<String, String>> get(String sql) throws SQLException {
         try {
             Statement statement =  this.connection.createStatement();
 
-            String sql = "SELECT * from " + this.table;
             ResultSet resultSet = statement.executeQuery(sql);
 
             ArrayList<HashMap<String, String>> results = new ArrayList<>();
@@ -87,6 +86,45 @@ public class ActiveRecordModel {
         } catch (SQLException e) {
             if (this.verbose)
                 System.out.println("Caught SQL error at `all()`.");
+            throw e;
+        }
+    }
+
+    public ArrayList<HashMap<String, String>> all() throws SQLException {
+        try {
+            String sql = "SELECT * from " + this.table;
+
+            ArrayList<HashMap<String, String>> results = this.get(sql);
+            return results;
+        } catch (SQLException e) {
+            if (this.verbose)
+                System.out.println("Caught SQL error at `all()`.");
+            throw e;
+        }
+    }
+
+    public ArrayList<HashMap<String, String>> find(String id) throws SQLException {
+        try {
+            String sql = "SELECT * from " + this.table + " where " + this.table + ".id = " + id;
+
+            ArrayList<HashMap<String, String>> results = this.get(sql);
+            return results;
+        } catch (SQLException e) {
+            if (this.verbose)
+                System.out.println("Caught SQL error at `find()`.");
+            throw e;
+        }
+    }
+
+    public ArrayList<HashMap<String, String>> where(String key, String value) throws SQLException {
+        try {
+            String sql = "SELECT * from " + this.table + " where " + this.table + "." + key + " = \"" + value + "\"";
+
+            ArrayList<HashMap<String, String>> results = this.get(sql);
+            return results;
+        } catch (SQLException e) {
+            if (this.verbose)
+                System.out.println("Caught SQL error at `where()`.");
             throw e;
         }
     }
