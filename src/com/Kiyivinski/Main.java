@@ -11,7 +11,10 @@ public class Main {
     public static void printResults(String message, ArrayList<HashMap<String, String>> results) {
         System.out.println(message);
         for (HashMap<String, String> result: results) {
-            System.out.println("Employee: " + result.get("first") + " registered.");
+            for (String key: result.keySet()) {
+               System.out.print(result.get(key) + " ");
+            }
+            System.out.println("");
         }
         System.out.println("");
     }
@@ -40,6 +43,10 @@ public class Main {
 
                 results = employeeModel.where("first", "John");
                 printResults("Getting employee with a first name John", results);
+
+                System.out.println("Perform query on verbose model");
+                results = jobModel.query("SELECT * FROM jobs");
+                printResults("\nGetting employees first name", results);
 
             } catch (SQLException e) {
                 System.out.println("Error connecting to SQL server");

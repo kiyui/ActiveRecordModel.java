@@ -90,6 +90,17 @@ public class ActiveRecordModel {
         }
     }
 
+    public ArrayList<HashMap<String, String>> query(String sql) throws SQLException {
+        try {
+            ArrayList<HashMap<String, String>> results = this.get(sql);
+            return results;
+        } catch (SQLException e) {
+            if (this.verbose)
+                System.out.println("Caught SQL error at `where()`.");
+            throw e;
+        }
+    }
+
     public ArrayList<HashMap<String, String>> all() throws SQLException {
         try {
             String sql = "SELECT * from " + this.table;
