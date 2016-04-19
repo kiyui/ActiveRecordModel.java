@@ -195,5 +195,18 @@ public class ActiveRecordModel {
             throw e;
         }
     }
+
+    public ArrayList<HashMap<String, String>> delete(String key, String value) throws SQLException {
+        try {
+            String sql = "DELETE FROM " + this.table + " WHERE " + this.table + "." + key + "=" + value;
+
+            ArrayList<HashMap<String, String>> results = this.get(sql);
+            return results;
+        } catch (SQLException e) {
+            if (this.verbose)
+                System.out.println("Caught SQL error at `where()`.");
+            throw e;
+        }
+    }
 }
 
