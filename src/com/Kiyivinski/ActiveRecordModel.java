@@ -2,6 +2,7 @@ package com.Kiyivinski;
 
 import java.sql.*;
 import org.mariadb.jdbc.*;
+import org.mariadb.jdbc.internal.packet.dao.parameters.StreamParameter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,8 +85,10 @@ public class ActiveRecordModel {
             }
             return results;
         } catch (SQLException e) {
-            if (this.verbose)
-                System.out.println("Caught SQL error at `all()`.");
+            if (this.verbose) {
+                System.out.println("Caught SQL error at `get()`.");
+                System.out.println(e.toString());
+            }
             throw e;
         }
     }
@@ -96,7 +99,7 @@ public class ActiveRecordModel {
             return results;
         } catch (SQLException e) {
             if (this.verbose)
-                System.out.println("Caught SQL error at `where()`.");
+                System.out.println("Caught SQL error at `query()`.");
             throw e;
         }
     }
@@ -136,6 +139,47 @@ public class ActiveRecordModel {
         } catch (SQLException e) {
             if (this.verbose)
                 System.out.println("Caught SQL error at `where()`.");
+            throw e;
+        }
+    }
+
+    public ArrayList<HashMap<String, String>> create(HashMap<String, String> pairs) throws SQLException {
+        try {
+            String sql = "INSERT INTO " + this.table + " (";
+            String values = "(";
+            for (String key: pairs.keySet()) {
+                sql += "`" + key + "`, ";
+                values += "'" + pairs.get(key) + "', ";
+            }
+            values = values.substring(0, values.length() - 2) + ");";
+            sql = sql.substring(0, sql.length() - 2) + ") VALUES " + values;
+            System.out.println(sql);
+            ArrayList<HashMap<String, String>> results = this.get(sql);
+            return results;
+
+        } catch (SQLException e) {
+            if (this.verbose)
+                System.out.println("Caught SQL error at `create()`.");
+            throw e;
+        }
+    }
+
+    public ArrayList<HashMap<String, String>> update(Integer id, HashMap<String, String> pairs) throws SQLException {
+        try {
+            String sql = "UPDATE " + this.table + " SET ";
+            String values = "";
+            for (String key: pairs.keySet()) {
+                values += key + "='" + pairs.get(key) + "', ";
+            }
+            values = values.substring(0, values.length() - 2);
+            sql += values + " WHERE ID='" + id.toString() + "'";
+            System.out.println(sql);
+            ArrayList<HashMap<String, String>> results = this.get(sql);
+            return results;
+
+        } catch (SQLException e) {
+            if (this.verbose)
+                System.out.println("Caught SQL error at `create()`.");
             throw e;
         }
     }
