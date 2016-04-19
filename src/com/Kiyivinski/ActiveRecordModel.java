@@ -2,7 +2,6 @@ package com.Kiyivinski;
 
 import java.sql.*;
 import org.mariadb.jdbc.*;
-import org.mariadb.jdbc.internal.packet.dao.parameters.StreamParameter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
