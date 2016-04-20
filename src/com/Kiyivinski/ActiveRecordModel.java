@@ -208,5 +208,29 @@ public class ActiveRecordModel {
             throw e;
         }
     }
+
+    public ArrayList<HashMap<String, String>> last() throws SQLException {
+        try {
+            Statement statement =  this.connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("SELECT LAST_INSERT_ID()");
+
+            ArrayList<HashMap<String, String>> results = new ArrayList<>();
+            while(resultSet.next()) {
+                HashMap<String, String> result = new HashMap<>();
+                result.put("id", resultSet.getString("LAST_INSERT_ID()"));
+                if (this.verbose)
+                    System.out.println("");
+                results.add(result);
+            }
+            return results;
+        } catch (SQLException e) {
+            if (this.verbose) {
+                System.out.println("Caught SQL error at `get()`.");
+                System.out.println(e.toString());
+            }
+            throw e;
+        }
+    }
 }
 
