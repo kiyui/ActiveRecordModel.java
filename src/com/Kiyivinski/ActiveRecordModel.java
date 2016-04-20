@@ -142,6 +142,24 @@ public class ActiveRecordModel {
         }
     }
 
+    public ArrayList<HashMap<String, String>> where(HashMap<String, String> pairs) throws SQLException {
+        try {
+            String sql = "SELECT * from " + this.table + " where ";
+            for (String key: pairs.keySet()) {
+                sql += "`" + key + "`, ";
+                sql += "'" + pairs.get(key) + "', ";
+            }
+            sql = sql.substring(0, sql.length() - 2);
+            ArrayList<HashMap<String, String>> results = this.get(sql);
+            return results;
+
+        } catch (SQLException e) {
+            if (this.verbose)
+                System.out.println("Caught SQL error at `create()`.");
+            throw e;
+        }
+    }
+
     public ArrayList<HashMap<String, String>> create(HashMap<String, String> pairs) throws SQLException {
         try {
             String sql = "INSERT INTO " + this.table + " (";
